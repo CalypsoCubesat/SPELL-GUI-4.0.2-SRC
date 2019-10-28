@@ -1,0 +1,60 @@
+SPELL GUI 4.0.3 release notes
+
+Starting version 4.0.0, SPELL-GUI is based on SPELL-GUI 2.4.7 (please note SPELL-GUI did not have a version number so far).
+
+---------
+CHANGELOG
+---------
+
+Change log SPELL-GUI version 4.0.3 from version 4.0.2:
+======================================================
+
+	- Fixed missing log libraries
+	- Fixed missing ssh login options keyboard-interactive
+	- Package RELEASENOTES into SPELL GUI deployment
+
+Change log SPELL-GUI version 4.0.2 from version 4.0.1:
+======================================================
+
+	- Fix "Export procedure text view" feature that was broken in 4.0.1
+	- Fix "Memory left" calculation and display
+	- Improve release.nfo parsing and storage (per server)
+	- SPELL GUI Release Notes inside of SPELL GUI
+	- Removed -consoleLog arguments from Windows startup script (SCR#9777)
+
+Change log SPELL-GUI version 4.0.1 from version 4.0.0:
+======================================================
+
+	- SPELL will now use the correct log file to log it's error messages
+	- Removed deprecated COTS and updated start scripts accordingly
+	- SPELL-GUI will now show all notifications again
+	- Restart Button will always be disabled if not configured
+	- increased size of line number in Codeview
+	- Multiple SPELL-GUI instances on the same server will work fine again
+
+Change log SPELL-GUI version 4.0.0 from SPELL-GUI version 2.4.7:
+================================================================
+
+	- SPELL-GUI is now based upon  Eclipse IDE Neon 4.6.2
+	- SPELL Core version displayed in title bar after connecting to a server (E-229)
+	- SPELL-GUI Version displayed in title bar (E-229)
+	- SSH port can be customized in config file (IT request for improved QoS) E-324
+	- fixed wrong height for Status Bar and Clock Bar (UTD 760 part 20)
+	- fixes for improved parallel handling of SPELL packets (GAR 6475)
+	- added ability to restart SPELL-Server based on information provided in config file
+	- Force Prompt Confirm Option (requires new SPELL version 2.4.5.2+, prior versions will ignore this option) (E-311)
+	- Added default config file in case no config file as given/found
+	- fixed handling of unsigned values for DataVariables (GAR 3888)
+	- improved error messages in case of compilation issues with procedures and in case of unexpected exceptions (GAR 6116)
+	- use default RUNTIME folder in case the environment variable $SPELL_DATA is not set
+	- FlowChart prototype displaying vector graphics provided by the SPELL server if available and configured(Currently disabled on production servers until in a deployable shape)
+	- use Worker threads to handle incoming packets instead of a new thread for each packet (GAR 6475)
+	- extend ItemNotificationDialog to be able to update existing with additional entries not provided before (required for showing real TCs executed for one PTC on DTP platforms)
+	- removed replacement of ' characters with " characters (this wasn't necessary to begin with and was causing problems when copy pasting code to the code view)
+	- retain at least one block of Text output when there is too much output from a  SPELL procedure(UTD 262)
+	- fix timestamps not taken into account when selecting text with enabled timestamp in TextView
+	- prototype for SPELL Procedures being able to display custom information in SPELL-GUI (E-308)(Currently disabled on production servers until in a deployable shape)
+	- improved error handling of broken procedure tabs (UTD 685)
+	- increased default size for the variables value column (UTD 625)
+	- find functionality fixed (works already in 2.4.7) (GAR 5620)
+	- Improved execution speed of procedure with low ExecutionDelay (< 80 ms) due to improved parallel handling of packets

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.astra.ses.spell.gui.toolbars.clock.control">
+            <control
+                  class="com.astra.ses.spell.gui.clock.ClockControlContribution">
+            </control>
+            <command
+                  commandId="com.astra.ses.spell.gui.HiddenCommand"
+                  id="com.astra.ses.spell.gui.toolbars.hidden2"
+                  icon="icon/empty-18.png">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>

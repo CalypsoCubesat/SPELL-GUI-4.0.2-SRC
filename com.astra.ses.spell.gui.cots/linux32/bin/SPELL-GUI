@@ -1,0 +1,75 @@
+#!/bin/bash
+################################################################################
+#
+#  Copyright (C) 2008, 2017 SES ENGINEERING, Luxembourg S.A.R.L.
+#
+#  This file is part of SPELL.
+#
+#  SPELL is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SPELL is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SPELL. If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+
+#===============================================================================
+# Setup main environment variables
+#===============================================================================
+
+# Satellite
+SATELLITE=$1
+[ -z $SATELLITE ] && echo "Must provide the spacecraft: $0 <sat> <server>" && exit 1
+
+SERVER_NAME=$1
+[ -z $SERVER_NAME ] && echo "Must provide the server name: $0 <sat> <server>" && exit 1
+
+# Set SPELL home
+if [ -z $SPELL_HOME ]; then
+    export SPELL_HOME=/home/spell/SPELL
+fi
+[ ! -d $SPELL_HOME ] && echo "ERROR: cannot find SPELL home directory: $SPELL_HOME" && exit 1
+
+#===============================================================================
+# Setup environment
+#===============================================================================
+SETUP_SCRIPT=$SPELL_HOME/bin/setup-environment-gui.sh
+[ ! -f $SETUP_SCRIPT ] && echo "ERROR: cannot find environment setup script: $SETUP_SCRIPT" && exit 1
+! source $SETUP_SCRIPT && echo "ERROR: SPELL-GUI environment setup failed" && exit 1
+
+#===============================================================================
+# Launcher configuration
+#===============================================================================
+SPELL_GUI=$SPELL_HOME/spel-gui
+GUI_RCP_CONFIG=$SPELL_HOME/configuration
+[ ! -f $SPELL_GUI ] && echo "ERROR: cannot find SPELL-GUI executable: $SPELL_GUI" && exit 1
+[ ! -d $RCP_CONFIG_DIR ] && echo "ERROR: cannot find RCP configuration directory: $RCP_CONFIG_DIR" && exit 1
+
+#===============================================================================
+# Resolve initial server
+#===============================================================================
+
+# Configuration file
+CFG_PATH=${SPELL_CONFIG}/config_${SATELLITE}_${SERVER_NAME}.xml
+if [ ! -f $CFG_PATH  ]; then
+    CFG_PATH=${SPELL_CONFIG}/config.xml
+fi
+[ ! -f $CFG_PATH ] && echo "ERROR: cannot find configuration file $CFG_PATH. Default configuration will be created."
+echo "Configuration file: $CFG_PATH"
+
+#===============================================================================
+# Start SPELL-GUI
+#===============================================================================
+CMD="$SPELL_GUI -os linux -arch x86 -ws gtk -data @noDefault
+    -D__CTX__="$SATELLITE" -D__SRV__="$SERVER_NAME" -config $CFG_PATH -consoleLog"
+
+echo "Starting SPELL-GUI for $SATELLITE"
+
+$CMD

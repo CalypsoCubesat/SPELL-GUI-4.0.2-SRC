@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SPELL GUI Cots
+Bundle-SymbolicName: com.astra.ses.spell.gui.cots
+Bundle-Version: 4.0.2.qualifier
+Bundle-Vendor: ASTRA
+Eclipse-BundleShape: dir

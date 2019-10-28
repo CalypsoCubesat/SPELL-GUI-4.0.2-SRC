@@ -1,0 +1,57 @@
+#!/bin/sh
+
+SRC_DIR=$1
+BACKEND=/opt/spell_cots/lib/python2.5/site-packages
+PACKAGE=spell.lib.hifly.interface
+
+echo "[*] Checking directories"
+
+[[ -z "$SRC_DIR" ]] && echo "Must provide the absolute path to the hifly dev_ws/src directory" && exit 1
+[[ ! -d "$SRC_DIR/AAIDL" ]] && echo "Cannot find EXIF IDL interfaces in hifly dev_ws/src directory" && exit 1
+[[ ! -d "$SRC_DIR/TKCOM" ]] && echo "Cannot find TKMA IDL interfaces in hifly dev_ws/src directory" && exit 1
+[[ ! -d "$SRC_DIR/USER" ]] && echo "Cannot find USER IDL interfaces in hifly dev_ws/src directory" && exit 1
+
+echo "[*] Gathering files"
+
+EXIF_IDLS=`find $SRC_DIR/AAIDL -name "*.idl"`
+TKCOM_IDLS=`find $SRC_DIR/TKCOM -name "*.idl"`
+USER_IDLS=`find $SRC_DIR/USER -name "*.idl"`
+GEN_DIR=`pwd`
+
+
+echo "[*] Preparing"
+
+[[ -d $GEN_DIR/spell/lib/hifly/interface ]] && rm -rf $GEN_DIR/spell/lib/hifly/interface
+
+
+echo "[*] Compiling IDLs into $GEN_DIR"
+
+cd $SRC_DIR/AAIDL
+for IDL in $EXIF_IDLS
+do
+    echo "    - `basename $IDL`..."
+    omniidl -bpython -C$GEN_DIR -p$BACKEND -Wbpackage=$PACKAGE -I$SRC_DIR/AAIDL `basename $IDL`
+done
+
+cd $SRC_DIR/TKCOM
+for IDL in $TKCOM_IDLS
+do
+    echo "    - `basename $IDL`..."
+    omniidl -bpython -C$GEN_DIR -p$BACKEND -Wbpackage=$PACKAGE -I$SRC_DIR -I$SRC_DIR/TKCOM `basename $IDL`
+done
+
+cd $SRC_DIR/USER
+for IDL in $USER_IDLS
+do
+    echo "    - `basename $IDL`..."
+    omniidl -bpython -C$GEN_DIR -p$BACKEND -Wbpackage=$PACKAGE -I$SRC_DIR -I$SRC_DIR/USER `basename $IDL`
+done
+
+cd $GEN_DIR
+find spell/lib/hifly/interface/ -exec grep "spell.lib.hifly.interface.spell.lib.hifly.interface" '{}' -l \; | while read file 
+do
+  sed -i 's,\(spell.lib.hifly.interface\).spell.lib.hifly.interface,\1,g' $file
+done
+
+echo "[*] Done."
+
